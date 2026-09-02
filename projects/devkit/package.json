@@ -1,5 +1,5 @@
 {
-  "name": "@ardium-ui/devkit",
+  "name": "@ardium-pl/devkit",
   "version": "8.3.2",
   "private": false,
   "peerDependencies": {
