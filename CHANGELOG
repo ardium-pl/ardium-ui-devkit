@@ -1,3 +1,15 @@
+## v8.3.3
+
+### Bugfixes
+
+- updated `simple-bool` from version `3.0.1` to `4.1.1` to fix an error during test run
+
+## v8.3.2
+
+### Additions
+
+- `trackBoundControl` and `trackFormControl` now support passing in an `Injector` instance via an options object
+
 ## v8.3.1
 
 ### Bugfixes
