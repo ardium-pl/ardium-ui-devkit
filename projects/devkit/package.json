@@ -12,7 +12,7 @@
     "dice-coefficient": "^2.1.1",
     "key-display-names": "^1.2.0",
     "lodash": "^4.17.23",
-    "simple-bool": "^3.0.1",
+    "simple-bool": "^4.1.1",
     "more-rounding": "^4.2.2"
   },
   "devDependencies": {

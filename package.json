@@ -25,7 +25,7 @@
     "lodash": "^4.17.23",
     "more-rounding": "^4.2.2",
     "rxjs": "~7.8.0",
-    "simple-bool": "^3.0.1",
+    "simple-bool": "^4.1.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
   },

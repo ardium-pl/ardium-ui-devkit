@@ -51,8 +51,8 @@ importers:
         specifier: ~7.8.0
         version: 7.8.1
       simple-bool:
-        specifier: ^3.0.1
-        version: 3.1.0
+        specifier: ^4.1.1
+        version: 4.1.1
       tslib:
         specifier: ^2.3.0
         version: 2.6.3
@@ -5168,8 +5168,8 @@ packages:
     resolution: {integrity: sha512-PHMifhh3EN4loMcHCz6l3v/luzgT3za+9f8subGgeMNjbJjzH4Ij/YoX3Gvu+kaouJRIlVdTHHCREADYf+ZteA==}
     engines: {node: ^18.17.0 || >=20.5.0}
 
-  simple-bool@3.1.0:
-    resolution: {integrity: sha512-pQYhhdmATwTPoEUcKfydGF+NtHtWZVkBWu0CIKKeO+M6xR9AiICD77V0MYmCPqasvxLKwOPxs/USaS5uCn8wnA==}
+  simple-bool@4.1.1:
+    resolution: {integrity: sha512-+u+EHex2s5l+zFCwVOyxc+YScK1xOTH1ciT0tWlqnJ0BLTp9HdsW8cnfeD0M35dexizFSG1VxRqxYfmtUm1wIg==}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -11440,7 +11440,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  simple-bool@3.1.0: {}
+  simple-bool@4.1.1: {}
 
   sisteransi@1.0.5: {}
 
