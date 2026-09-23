@@ -70,7 +70,7 @@ describe('mapSignal', () => {
     });
   });
 
-  describe('setKey', () => {
+  describe('setKey and set', () => {
     it('should add a new entry', () => {
       signal.setKey('d', 4);
       expect(signal.get('d')).toBe(4);
@@ -81,6 +81,12 @@ describe('mapSignal', () => {
       signal.setKey('b', 99);
       expect(signal.get('b')).toBe(99);
       expect(signal.size()).toBe(3);
+    });
+
+    it('should support set alias', () => {
+      signal.set('e', 5);
+      expect(signal.get('e')).toBe(5);
+      expect(signal.size()).toBe(4);
     });
   });
 
@@ -93,6 +99,47 @@ describe('mapSignal', () => {
     it('should do nothing for non-existent entry and return false', () => {
       expect(signal.delete('never-there')).toBe(false);
       expect(signal.size()).toBe(3);
+    });
+  });
+
+  describe('merge', () => {
+    it('should merge new entries into the map', () => {
+      signal.merge([
+        ['d', 4],
+        ['e', 5],
+      ]);
+      expect(signal.entriesArray()).toEqual([
+        ['a', 1],
+        ['b', 2],
+        ['c', 3],
+        ['d', 4],
+        ['e', 5],
+      ]);
+    });
+
+    it('should overwrite existing entries', () => {
+      signal.merge([
+        ['b', 102],
+        ['c', 103],
+      ]);
+      expect(signal.entriesArray()).toEqual([
+        ['a', 1],
+        ['b', 102],
+        ['c', 103],
+      ]);
+    });
+  });
+
+  describe('toggleKey', () => {
+    it('should add the key if it does not exist', () => {
+      signal.toggleKey('d', 4);
+      expect(signal.has('d')).toBe(true);
+      expect(signal.get('d')).toBe(4);
+    });
+
+    it('should remove the key if it exists', () => {
+      signal.toggleKey('b', 99);
+      expect(signal.has('b')).toBe(false);
     });
   });
 

@@ -83,6 +83,20 @@ describe('SetSignal', () => {
     });
   });
 
+  describe('toggle', () => {
+    it('should add item if not present and return true', () => {
+      expect(signal.toggle(99)).toBe(true);
+      expect(signal.has(99)).toBe(true);
+    });
+
+    it('should remove item if present and return false', () => {
+      signal.add(2);
+      expect(signal.has(2)).toBe(true);
+      expect(signal.toggle(2)).toBe(false);
+      expect(signal.has(2)).toBe(false);
+    });
+  });
+
   describe('clear', () => {
     it('should empty the set', () => {
       signal.clear();

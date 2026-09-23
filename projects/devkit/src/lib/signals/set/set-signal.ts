@@ -27,7 +27,9 @@ export interface SetSignal<T> extends Signal<Set<T>> {
 /**
  * A writable set signal with mutating and non-mutating methods.
  */
-export interface WritableSetSignal<T> extends WritableSignal<Set<T>>, SetSignal<T> {
+export interface WritableSetSignal<T>
+  extends WritableSignal<Set<T>>,
+    SetSignal<T> {
   /**
    * Returns a read-only version of the set signal.
    */
@@ -40,9 +42,15 @@ export interface WritableSetSignal<T> extends WritableSignal<Set<T>>, SetSignal<
 
   /**
    * Deletes a value from the set.
-   * Returns true if a value was removed.
+   * @returns true if a value was removed.
    */
   delete(value: T): boolean;
+
+  /**
+   * Toggles a value in the set. If the value exists, it will be removed; if it does not exist, it will be added.
+   * @returns true if the value was added, false if it was removed.
+   */
+  toggle(value: T): boolean;
 
   /**
    * Clears the set.
@@ -123,6 +131,21 @@ export function setSignal<T>(
       return copy;
     });
     return deleted;
+  };
+
+  internalSignal.toggle = (value: T): boolean => {
+    let added = false;
+    internalSignal.update((set) => {
+      const copy = new Set(set);
+      if (copy.has(value)) {
+        copy.delete(value);
+      } else {
+        copy.add(value);
+        added = true;
+      }
+      return copy;
+    });
+    return added;
   };
 
   internalSignal.clear = () => {

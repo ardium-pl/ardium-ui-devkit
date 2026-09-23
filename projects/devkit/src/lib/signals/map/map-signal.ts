@@ -57,9 +57,27 @@ export interface WritableMapSignal<K, V>
 
   /**
    * Deletes a key from the map.
-   * Returns true if a value was removed.
+   * @returns true if a value was removed.
    */
   delete(key: K): boolean;
+
+  /**
+   * Merges another map into the current map.
+   */
+  merge(value: Iterable<[K, V]>): void;
+
+  /**
+   * Toggles a value for a key. If the key exists, it will be deleted; if it doesn't exist, it will be added with the provided value.
+   * @returns true if the key was added, false if it was deleted.
+   */
+  toggleKey(key: K, value: V): boolean;
+
+  /**
+   * Toggles a value for a key. If the key exists, it will be deleted; if it doesn't exist, it will be added with the provided value.
+   * Alias of the method `toggleKey()`.
+   * @returns true if the key was added, false if it was deleted.
+   */
+  toggle(key: K, value: V): boolean;
 
   /**
    * Clears the map.
@@ -69,11 +87,17 @@ export interface WritableMapSignal<K, V>
   /**
    * Replaces the map with a new map.
    */
-  setMap(value: Map<K, V>): void;
+  setMap(value: Iterable<[K, V]>): void;
+
   /**
    * Replaces the map with a new map. Alias of the method `setMap()`.
+   * @deprecated Use `setMap()` instead for clarity.
    */
-  set(value: Map<K, V>): void;
+  set(value: Iterable<[K, V]>): void;
+  /**
+   * Sets a value for the key. Alias of the method `setKey()`.
+   */
+  set(key: K, value: V): void;
 
   /**
    * Updates the map using an update function.
@@ -121,8 +145,7 @@ export function mapSignal<K, V>(
   const _update = internalSignal.update;
   const _asReadonly = internalSignal.asReadonly;
 
-  internalSignal.setMap = (value: Map<K, V>) => _set(new Map(value));
-  internalSignal.set = (value: Map<K, V>) => _set(new Map(value));
+  internalSignal.setMap = (value: Iterable<[K, V]>) => _set(new Map(value));
 
   internalSignal.setKey = (key: K, value: V) => {
     internalSignal.update((map) => {
@@ -130,6 +153,14 @@ export function mapSignal<K, V>(
       copy.set(key, value);
       return copy;
     });
+  };
+
+  internalSignal.set = (keyOrMap: Iterable<[K, V]> | K, value?: V) => {
+    if (Symbol.iterator in Object(keyOrMap)) {
+      _set(new Map(keyOrMap as Iterable<[K, V]>));
+    } else {
+      internalSignal.setKey(keyOrMap as K, value!);
+    }
   };
 
   internalSignal.delete = (key: K): boolean => {
@@ -141,6 +172,35 @@ export function mapSignal<K, V>(
       return copy;
     });
     return deleted;
+  };
+
+  internalSignal.merge = (value: Iterable<[K, V]>) => {
+    internalSignal.update((map) => {
+      const copy = new Map(map);
+      for (const [k, v] of value) {
+        copy.set(k, v);
+      }
+      return copy;
+    });
+  };
+
+  internalSignal.toggleKey = (key: K, value: V) => {
+    let added = false;
+    internalSignal.update((map) => {
+      const copy = new Map(map);
+      if (copy.has(key)) {
+        copy.delete(key);
+      } else {
+        copy.set(key, value);
+        added = true;
+      }
+      return copy;
+    });
+    return added;
+  };
+
+  internalSignal.toggle = (key: K, value: V) => {
+    return internalSignal.toggleKey(key, value);
   };
 
   internalSignal.clear = () => {

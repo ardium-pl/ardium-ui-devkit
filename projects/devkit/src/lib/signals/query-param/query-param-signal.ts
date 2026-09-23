@@ -15,7 +15,14 @@ import { filter } from 'rxjs';
 import { isAnyString, isNull } from 'simple-bool';
 
 export interface QueryParamSignalNonNullable<T> extends Signal<T> {
+  /**
+   * The name of the query parameter used to store the signal value.
+   */
   readonly paramName: string;
+
+  /**
+   * Computed signal that returns the serialized value of the signal.
+   */
   readonly serialized: Signal<string | null>;
 }
 
