@@ -49,20 +49,59 @@ export function coerceDateOnlyProperty<T>(
   asUTC: boolean = false,
 ): Date | T {
   if (typeof v == 'string') {
-    if (v.toLowerCase() === 'now' || v.toLowerCase() === 'today') {
+    const lower = v.toLowerCase();
+    if (lower === 'now' || lower === 'today') {
       const now = new Date();
-      now.setMinutes(now.getMinutes() + now.getTimezoneOffset());
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       return asUTC
         ? getUTCDate(
-            now.getFullYear(),
-            now.getMonth(),
-            now.getDate(),
-            now.getHours(),
-            now.getMinutes(),
-            now.getSeconds(),
-            now.getMilliseconds(),
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate(),
+            today.getHours(),
+            today.getMinutes(),
+            today.getSeconds(),
+            today.getMilliseconds(),
           )
-        : now;
+        : today;
+    }
+    if (lower === 'tomorrow') {
+      const now = new Date();
+      const tomorrow = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1,
+      );
+      return asUTC
+        ? getUTCDate(
+            tomorrow.getFullYear(),
+            tomorrow.getMonth(),
+            tomorrow.getDate(),
+            tomorrow.getHours(),
+            tomorrow.getMinutes(),
+            tomorrow.getSeconds(),
+            tomorrow.getMilliseconds(),
+          )
+        : tomorrow;
+    }
+    if (lower === 'yesterday') {
+      const now = new Date();
+      const yesterday = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() - 1,
+      );
+      return asUTC
+        ? getUTCDate(
+            yesterday.getFullYear(),
+            yesterday.getMonth(),
+            yesterday.getDate(),
+            yesterday.getHours(),
+            yesterday.getMinutes(),
+            yesterday.getSeconds(),
+            yesterday.getMilliseconds(),
+          )
+        : yesterday;
     }
   }
   const dateV = new Date(v);
