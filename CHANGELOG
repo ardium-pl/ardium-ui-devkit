@@ -1,3 +1,17 @@
+## v8.4.3
+
+- `coerceDateOnlyProperty` now supports `'yesterday'` and `'tomorrow'` strings.
+- Fixed `coerceDateOnlyProperty` subtracting the timezone from the date incorrectly.
+- Fixed `coerceDateOnlyProperty` not setting the time component to zero when using `'today'`.
+
+## v8.4.2
+
+- `trackBoundControl` now doesn't throw an error when used in a component that is used with Signal Forms' FormField directive. All logic is skipped. If you want to have signal-based access to the properties of a signal forms control, implement associated inputs as per `FormUiControl`.
+
+## v8.4.1
+
+No changes.
+
 ## v8.4.0
 
 ### Deprecations
