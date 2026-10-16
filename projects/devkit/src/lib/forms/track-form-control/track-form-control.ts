@@ -210,8 +210,20 @@ class FormControlTracker<T> {
           }
         }
         // grab the AbstractControl instance
-        const instance = ngControl.control;
-        if (!instance) return;
+        const instance = ngControl.control as AbstractControl<T> | unknown;
+        // ensure that control is not InteropNgControl from Angular 22
+        // (even though the library is using Angular 18)
+        // but it causes issues when paired with signal forms
+        // InteropNgControl is always recurrently linked to itself through the control property
+        if (
+          !instance ||
+          typeof instance !== 'object' ||
+          ('control' in instance && instance.control === instance) ||
+          !('events' in instance) ||
+          !isObservable(instance.events)
+        ) {
+          return;
+        }
         (this as any).instance = instance;
       }
     }
