@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   Directive,
   effect,
@@ -7,6 +8,7 @@ import {
   input,
   model,
   output,
+  PLATFORM_ID,
   untracked,
 } from '@angular/core';
 import { coerceNumberProperty } from './../coercion/number';
@@ -24,7 +26,8 @@ export type ArdInfScrollTarget =
   standalone: false,
 })
 export class ArdiumInfiniteScrollDirective {
-  private readonly elementRef: ElementRef<HTMLElement> = inject(ElementRef);
+  private readonly _platformId = inject(PLATFORM_ID);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
   protected readonly _DEFAULTS = inject(ARD_INFINITE_SCROLL_DEFAULTS);
 
   readonly ardInfScrollReachThreshold = output<void>();
@@ -101,6 +104,7 @@ export class ArdiumInfiniteScrollDirective {
     }
   }
   private _detectWindowReachThreshold() {
+    if (!isPlatformBrowser(this._platformId)) return;
     const { top, height } = this._getElementRect();
     const viewportHeight = window.innerHeight;
     const thresholdOffset = this.ardInfScrollThreshold();

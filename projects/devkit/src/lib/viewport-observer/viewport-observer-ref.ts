@@ -80,6 +80,7 @@ export class ArdViewportObserverRef {
   private readonly _rawPosition = signal<
     Readonly<TopBottom<number>> | undefined
   >(undefined);
+
   public readonly position = computed(() => {
     const pos = this._rawPosition();
     if (!pos) return undefined;
@@ -88,6 +89,7 @@ export class ArdViewportObserverRef {
       bottom: window.innerHeight - pos.bottom - this._margins.bottom(),
     };
   });
+  
   public readonly viewportRelation = computed<ViewportRelation | undefined>(
     () => this._getNewRelation(this._rawPosition()),
   );

@@ -1,10 +1,10 @@
 import { ElementRef } from '@angular/core';
 
-export function getDomContentRect(el: HTMLElement): DOMRect;
-export function getDomContentRect(el: ElementRef<HTMLElement>): DOMRect;
-export function getDomContentRect(
-  el: HTMLElement | ElementRef<HTMLElement>,
-): DOMRect;
+/**
+ * Gets the content rect of an HTMLElement or ElementRef<HTMLElement>. Does not work in SSR environments.
+ * @param el The HTMLElement or ElementRef<HTMLElement> to get the content rect for.
+ * @returns A DOMRect representing the content rect of the element.
+ */
 export function getDomContentRect(
   el: HTMLElement | ElementRef<HTMLElement>,
 ): DOMRect {
@@ -28,11 +28,11 @@ export function getDomContentRect(
   );
 }
 
-export function getDomPaddingRect(el: HTMLElement): DOMRect;
-export function getDomPaddingRect(el: ElementRef<HTMLElement>): DOMRect;
-export function getDomPaddingRect(
-  el: HTMLElement | ElementRef<HTMLElement>,
-): DOMRect;
+/**
+ * Gets the padding rect of an HTMLElement or ElementRef<HTMLElement>. Does not work in SSR environments.
+ * @param el The HTMLElement or ElementRef<HTMLElement> to get the padding rect for.
+ * @returns A DOMRect representing the padding rect of the element.
+ */
 export function getDomPaddingRect(
   el: HTMLElement | ElementRef<HTMLElement>,
 ): DOMRect {

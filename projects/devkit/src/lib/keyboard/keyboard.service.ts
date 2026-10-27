@@ -1,26 +1,24 @@
 import {
-    computed,
-    Injectable,
-    OnDestroy,
-    Renderer2,
-    signal,
-    WritableSignal,
+  afterNextRender,
+  computed,
+  Injectable,
+  OnDestroy,
+  Renderer2,
+  signal,
+  WritableSignal,
 } from '@angular/core';
 import { ɵDomRendererFactory2 } from '@angular/platform-browser';
 import { filter, map, Observable, Subject } from 'rxjs';
 import {
-    KeyboardKey,
-    KeyboardKeyState,
-    KeyboardShortcut,
+  KeyboardKey,
+  KeyboardKeyState,
+  KeyboardShortcut,
 } from './keyboard.types';
 import {
-    _ExpectedModifierKeySide,
-    _KeyboardShortcutInternal,
+  _ExpectedModifierKeySide,
+  _KeyboardShortcutInternal,
 } from './types-internal';
-import {
-    isModifierKeyInWrongState,
-    trySettingModifierKey,
-} from './utils';
+import { isModifierKeyInWrongState, trySettingModifierKey } from './utils';
 
 @Injectable({
   providedIn: 'root',
@@ -33,21 +31,23 @@ export class KeyboardService implements OnDestroy {
   constructor(rendererFactory: ɵDomRendererFactory2) {
     this.renderer = rendererFactory.createRenderer(null, null);
     //listen to events
-    this.removeListenFuncKeydown = this.renderer.listen(
-      'document',
-      'keydown',
-      (e) => this._onKeydown(e),
-    );
-    this.removeListenFuncKeyup = this.renderer.listen(
-      'document',
-      'keyup',
-      (e) => this._onKeyup(e),
-    );
-    this.removeListenFuncWindowblur = this.renderer.listen(
-      'window',
-      'blur',
-      () => this._resetAllKeys(),
-    );
+    afterNextRender(() => {
+      this.removeListenFuncKeydown = this.renderer.listen(
+        'document',
+        'keydown',
+        (e) => this._onKeydown(e),
+      );
+      this.removeListenFuncKeyup = this.renderer.listen(
+        'document',
+        'keyup',
+        (e) => this._onKeyup(e),
+      );
+      this.removeListenFuncWindowblur = this.renderer.listen(
+        'window',
+        'blur',
+        () => this._resetAllKeys(),
+      );
+    });
   }
 
   ngOnDestroy(): void {

@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { isArray } from 'simple-bool';
 import {
   FileSystemMethod,
@@ -28,6 +29,7 @@ const DEFAULT_REQUEST_OPTIONS: FileSystemRequestOptions = {
   providedIn: 'root',
 })
 export class FileSystemService {
+  private readonly _platformId = inject(PLATFORM_ID);
   /**
    * Checks if the File System Access API is supported for the specified method.
    *
@@ -40,6 +42,7 @@ export class FileSystemService {
     method: 'showSaveFilePicker' | 'showOpenFilePicker',
   ): boolean {
     try {
+      if (!isPlatformBrowser(this._platformId)) return false;
       // isn't in an iframe && browser version is high enough
       return window.self === window.top && method in window;
     } catch (err) {
@@ -61,6 +64,8 @@ export class FileSystemService {
     data: string | Blob,
     options: FileSystemSaveOptions = {},
   ): Promise<boolean> {
+    if (!isPlatformBrowser(this._platformId)) return false;
+    
     options = {
       ...DEFAULT_SAVE_OPTIONS,
       ...options,
@@ -133,6 +138,8 @@ export class FileSystemService {
   async requestFileUpload(
     options: FileSystemRequestOptions = {},
   ): Promise<File | File[] | null> {
+    if (!isPlatformBrowser(this._platformId)) return null;
+
     options = {
       ...DEFAULT_REQUEST_OPTIONS,
       ...options,

@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   computed,
   effect,
   inject,
@@ -92,6 +93,11 @@ interface _PersistentSignalOptionsBase<T> {
    * If true, creates a non-nullable persistent signal interface.
    */
   nonNullable?: boolean;
+
+  /**
+   * Optional Angular `Injector` to run the effect in the correct injection context. If not provided, the current injection context will be used.
+   */
+  injector?: Injector;
 }
 interface _PersistentSignalOptionsDeprecated<T>
   extends _PersistentSignalOptionsBase<T> {
@@ -225,22 +231,27 @@ function _assignPersistentSignalListeners<
     | WritablePersistentSignal<T>
     | WritablePersistentSignalNonNullable<T>,
 >(signal: S, options: PersistentSignalOptions<T>): void {
-  const storedValue = loadFromStorage<T>(options);
+  afterNextRender(
+    () => {
+      const storedValue = loadFromStorage<T>(options);
 
-  if (storedValue !== null) {
-    signal.set(storedValue);
-  } else {
-    updateStorage(options, signal());
-  }
+      if (storedValue !== null) {
+        signal.set(storedValue);
+      } else {
+        updateStorage(options, signal());
+      }
 
-  const injector = inject(Injector);
+      const injector = inject(Injector);
 
-  runInInjectionContext(injector, () => {
-    effect(() => {
-      const value = signal();
-      updateStorage(options, value);
-    });
-  });
+      runInInjectionContext(injector, () => {
+        effect(() => {
+          const value = signal();
+          updateStorage(options, value);
+        });
+      });
+    },
+    { injector: options.injector },
+  );
 }
 
 function loadFromStorage<T>(options: PersistentSignalOptions<T>): T | null {
